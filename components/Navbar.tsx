@@ -10,39 +10,73 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-import { translations } from "@/lib/translations";
-import { useLanguage } from "@/context/LanguageContext";
+/* ✅ DROPDOWN */
+function Dropdown({
+  name,
+  items,
+  openMenu,
+  setOpenMenu,
+  timeoutRef,
+}: {
+  name: string;
+  items: string[];
+  openMenu: string | null;
+  setOpenMenu: (val: string | null) => void;
+  timeoutRef: React.MutableRefObject<NodeJS.Timeout | null>;
+}) {
+  const handleEnter = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setOpenMenu(name);
+  };
 
-/* 🌍 FLAGS MAP */
-const flags: Record<string, string> = {
-  English: "🇬🇧",
-  Français: "🇫🇷",
-  Deutsch: "🇩🇪",
-  Español: "🇪🇸",
-  Italiano: "🇮🇹",
-  Português: "🇵🇹",
-  العربية: "🇸🇦",
-  中文: "🇨🇳",
-};
+  const handleLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setOpenMenu(null);
+    }, 150);
+  };
 
+  return (
+    <div
+      className="relative flex-1 text-center"
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
+    >
+      <div className="flex items-center justify-center gap-1 cursor-pointer hover:text-yellow-300 transition">
+        {name} <ChevronDown size={14} />
+      </div>
+
+      {openMenu === name && (
+        <div className="absolute left-1/2 -translate-x-1/2 mt-3 w-56 bg-white text-black rounded-xl shadow-xl py-2 z-50">
+          <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rotate-45"></div>
+
+          {items.map((item, i) => (
+            <div
+              key={i}
+              className="px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* MAIN NAVBAR */
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const { language, setLanguage } = useLanguage();
-  const [langOpen, setLangOpen] = useState(false);
-
-  const t = translations[language as keyof typeof translations];
-
   return (
     <div className="w-full font-sans">
 
-      {/* TOP */}
+      {/* 🔵 TOP BAR */}
       <div className="bg-[#0a2a66] text-white px-10 py-3 flex justify-between items-center">
 
         {/* LOGO */}
-        <div className="flex items-center gap-3 text-lg font-semibold">
-          <div className="w-9 h-9 border-2 rounded-full flex items-center justify-center">
+        <div className="flex items-center gap-3 text-lg font-semibold cursor-pointer">
+          <div className="w-9 h-9 rounded-full border-2 flex items-center justify-center">
             ₵
           </div>
           LottoAfrica
@@ -50,79 +84,141 @@ export default function Navbar() {
 
         {/* CENTER */}
         <div className="flex gap-8 text-sm items-center">
-          <div className="flex items-center gap-2 hover:text-yellow-300 cursor-pointer">
-            <Dice5 size={18} /> {t.casino}
+
+          <div className="flex items-center gap-2 hover:text-yellow-300 cursor-pointer transition">
+            <Dice5 size={18} />
+            Casino
           </div>
 
-          <div className="flex items-center gap-2 hover:text-yellow-300 cursor-pointer">
-            <Ticket size={18} /> {t.scratch}
+          <div className="flex items-center gap-2 hover:text-yellow-300 cursor-pointer transition">
+            <Ticket size={18} />
+            Scratchcards
           </div>
 
           <Link
             href="/play"
-            className="bg-yellow-400 px-5 py-1.5 rounded-full text-black flex items-center gap-2 hover:scale-105 transition"
+            className="bg-yellow-400 text-[#0a2a66] px-5 py-1.5 rounded-full font-semibold flex items-center gap-2 hover:scale-105 transition"
           >
-            <Dice5 size={18} /> {t.play}
+            <Dice5 size={18} />
+            Play
           </Link>
         </div>
 
         {/* RIGHT */}
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-4 text-sm items-center">
 
-          {/* 🌍 LANGUAGE WITH FLAGS */}
-          <div
-            className="relative"
-            onMouseEnter={() => setLangOpen(true)}
-            onMouseLeave={() => setLangOpen(false)}
-          >
-            <div className="flex items-center gap-2 cursor-pointer hover:text-yellow-300 transition">
-              <Globe size={16} />
-              <span>{flags[language]}</span>
-              <span>{language}</span>
-              <ChevronDown size={14} />
-            </div>
-
-            {langOpen && (
-              <div
-                className="absolute right-0 mt-3 w-56 bg-white text-black rounded-xl shadow-xl py-2 z-50"
-                onMouseEnter={() => setLangOpen(true)}
-                onMouseLeave={() => setLangOpen(false)}
-              >
-                <div className="absolute -top-2 right-4 w-4 h-4 bg-white rotate-45"></div>
-
-                {Object.keys(translations).map((lang) => (
-                  <div
-                    key={lang}
-                    onClick={() => {
-                      setLanguage(lang);
-                      setLangOpen(false);
-                    }}
-                    className={`flex items-center gap-3 px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 transition ${
-                      language === lang
-                        ? "font-semibold text-blue-600"
-                        : ""
-                    }`}
-                  >
-                    <span className="text-lg">{flags[lang]}</span>
-                    <span>{lang}</span>
-                  </div>
-                ))}
-              </div>
-            )}
+          {/* LANGUAGE */}
+          <div className="flex items-center gap-1 cursor-pointer hover:text-yellow-300 transition">
+            <Globe size={16} />
+            English
+            <ChevronDown size={14} />
           </div>
 
           {/* SIGN IN */}
-          <div className="flex items-center gap-1 hover:text-yellow-300 cursor-pointer transition">
+          <div className="flex items-center gap-1 cursor-pointer hover:text-yellow-300 transition">
             <User size={16} />
-            {t.signIn}
+            Sign In
           </div>
 
-          {/* SIGN UP */}
+          {/* SIGN UP BUTTON 🔥 */}
           <Link href="/signup">
-            <button className="bg-yellow-400 text-black px-4 py-1.5 rounded-full font-semibold hover:scale-105 transition">
-              {t.signUp}
+            <button className="bg-yellow-400 text-[#0a2a66] px-4 py-1.5 rounded-full font-semibold hover:scale-105 transition">
+              Sign Up
             </button>
           </Link>
+        </div>
+      </div>
+
+      {/* 🔷 BOTTOM BAR */}
+      <div className="bg-[#2f5fb3] text-white px-4 py-2 flex text-sm font-medium">
+
+        <Dropdown
+          name="Results"
+          items={[
+            "Latest Prize Breakdown",
+            "UK Millionaire Maker",
+            "EuroMillions HotPicks",
+            "EuroDreams Results",
+            "Eurojackpot Results",
+            "Free Lottery Results",
+          ]}
+          openMenu={openMenu}
+          setOpenMenu={setOpenMenu}
+          timeoutRef={timeoutRef}
+        />
+
+        <div className="flex-1 text-center hover:text-yellow-300 cursor-pointer">
+          Check Tickets
+        </div>
+
+        <div className="flex-1 text-center hover:text-yellow-300 cursor-pointer">
+          App
+        </div>
+
+        <div className="flex-1 text-center hover:text-yellow-300 cursor-pointer">
+          News
+        </div>
+
+        <Dropdown
+          name="Information"
+          items={[
+            "How to Play",
+            "Rules",
+            "Odds",
+            "FAQs",
+            "Associated Games",
+            "Superdraws",
+            "Subscriptions",
+            "Good Causes",
+            "Scams",
+            "Contact Us",
+          ]}
+          openMenu={openMenu}
+          setOpenMenu={setOpenMenu}
+          timeoutRef={timeoutRef}
+        />
+
+        <div className="flex-1 text-center hover:text-yellow-300 cursor-pointer">
+          Statistics
+        </div>
+
+        <Dropdown
+          name="Prizes"
+          items={[
+            "How to Claim",
+            "Biggest Winners",
+            "Prize Winner Statistics",
+            "Unclaimed Prizes",
+          ]}
+          openMenu={openMenu}
+          setOpenMenu={setOpenMenu}
+          timeoutRef={timeoutRef}
+        />
+
+        <Dropdown
+          name="Other Lotteries"
+          items={[
+            "Eurojackpot",
+            "EuroDreams",
+            "Free Lottery",
+            "Irish Lotto",
+            "UK Lotto",
+            "Thunderball",
+            "Pick 3",
+            "Vikinglotto",
+            "French Loto",
+            "German Lotto",
+            "Italian SuperEnalotto",
+            "Spanish El Gordo de Navidad",
+            "Spanish El Niño",
+          ]}
+          openMenu={openMenu}
+          setOpenMenu={setOpenMenu}
+          timeoutRef={timeoutRef}
+        />
+
+        <div className="flex-1 text-center hover:text-yellow-300 cursor-pointer">
+          Number Generator
         </div>
       </div>
     </div>
