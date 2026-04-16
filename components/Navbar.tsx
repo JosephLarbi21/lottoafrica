@@ -1,214 +1,135 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useRef } from "react";
-import {
-  Dice5,
-  Ticket,
-  User,
-  Globe,
-  ChevronDown,
-  Menu,
-  X,
-} from "lucide-react";
-
-/* DROPDOWN (DESKTOP ONLY) */
-function Dropdown({
-  name,
-  items,
-  openMenu,
-  setOpenMenu,
-  timeoutRef,
-}: {
-  name: string;
-  items: string[];
-  openMenu: string | null;
-  setOpenMenu: (val: string | null) => void;
-  timeoutRef: React.MutableRefObject<NodeJS.Timeout | null>;
-}) {
-  const handleEnter = () => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    setOpenMenu(name);
-  };
-
-  const handleLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setOpenMenu(null);
-    }, 150);
-  };
-
-  return (
-    <div
-      className="relative flex-1 text-center hidden md:block"
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
-    >
-      <div className="flex items-center justify-center gap-1 cursor-pointer hover:text-yellow-300">
-        {name} <ChevronDown size={14} />
-      </div>
-
-      {openMenu === name && (
-        <div className="absolute left-1/2 -translate-x-1/2 mt-3 w-56 bg-white text-black rounded-xl shadow-xl py-2 z-50">
-          {items.map((item, i) => (
-            <div
-              key={i}
-              className="px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
-            >
-              {item}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
+import { useState } from "react";
+import { Menu, X, Globe, ChevronDown, User } from "lucide-react";
+import LoginModal from "@/components/LoginModal";
 
 export default function Navbar() {
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [openLogin, setOpenLogin] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  const navItems = [
+    "Lotteries",
+    "Casino",
+    "Scratchcards",
+    "Raffles",
+    "Promotions",
+    "Results",
+    "Magazine",
+    "Support",
+  ];
+
+  const dropdownItems: Record<string, string[]> = {
+    Magazine: ["News", "Strategies", "Winners"],
+    Support: ["Help Center", "FAQs", "Contact"],
+  };
 
   return (
-    <div className="w-full font-sans">
-
-      {/* 🔵 TOP BAR */}
-      <div className="bg-[#0a2a66] text-white px-4 md:px-10 py-3 flex justify-between items-center">
-
-        {/* LOGO */}
-        <div className="flex items-center gap-2 md:gap-3 text-lg font-semibold">
-          <div className="w-8 h-8 md:w-9 md:h-9 rounded-full border-2 flex items-center justify-center">
-            ₵
-          </div>
-          LottoAfrica
-        </div>
-
-        {/* DESKTOP CENTER */}
-        <div className="hidden md:flex gap-8 text-sm items-center">
-          <div className="flex items-center gap-2 hover:text-yellow-300 cursor-pointer">
-            <Dice5 size={18} />
-            Casino
+    <>
+      <div className="w-full flex justify-center py-4 px-4 bg-gradient-to-b from-gray-100 to-white sticky top-0 z-50">
+        {/* 🔥 CURVED NAV */}
+        <div className="w-full max-w-7xl bg-white/90 backdrop-blur-md rounded-full shadow-lg px-6 py-3 flex items-center justify-between">
+          {/* LOGO */}
+          <div className="flex items-center gap-2 font-bold text-lg cursor-pointer">
+            <span className="text-red-500 text-2xl">●</span>
+            <span className="tracking-wide text-gray-900">
+              <span className="text-gray-500 text-xs mr-1">Lotto</span>
+              Africa
+            </span>
           </div>
 
-          <div className="flex items-center gap-2 hover:text-yellow-300 cursor-pointer">
-            <Ticket size={18} />
-            Scratchcards
-          </div>
+          {/* DESKTOP NAV */}
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-700">
+            {navItems.map((item) => (
+              <div
+                key={item}
+                className="relative group flex items-center gap-1 cursor-pointer"
+                onMouseEnter={() => setActiveDropdown(item)}
+                onMouseLeave={() => setActiveDropdown(null)}
+              >
+                <span className="hover:text-blue-600 transition">{item}</span>
 
-          <Link
-            href="/play"
-            className="bg-yellow-400 text-[#0a2a66] px-5 py-1.5 rounded-full font-semibold flex items-center gap-2 hover:scale-105 transition"
-          >
-            <Dice5 size={18} />
-            Play
-          </Link>
-        </div>
+                {dropdownItems[item] && <ChevronDown size={14} />}
 
-        {/* RIGHT */}
-        <div className="hidden md:flex gap-4 text-sm items-center">
-          <div className="flex items-center gap-1 cursor-pointer hover:text-yellow-300">
-            <Globe size={16} />
-            English
-          </div>
+                {/* GOLD UNDERLINE */}
+                <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
 
-          <div className="flex items-center gap-1 cursor-pointer hover:text-yellow-300">
-            <User size={16} />
-            Sign In
-          </div>
-
-          <Link href="/signup">
-            <button className="bg-yellow-400 text-[#0a2a66] px-4 py-1.5 rounded-full font-semibold hover:scale-105 transition">
-              Sign Up
-            </button>
-          </Link>
-        </div>
-
-        {/* MOBILE MENU BUTTON */}
-        <div className="md:hidden">
-          <button onClick={() => setMobileOpen(!mobileOpen)}>
-            {mobileOpen ? <X /> : <Menu />}
-          </button>
-        </div>
-      </div>
-
-      {/* 🔷 BOTTOM BAR (DESKTOP ONLY) */}
-      <div className="hidden md:flex bg-[#2f5fb3] text-white px-4 py-2 text-sm font-medium">
-
-        <Dropdown
-          name="Results"
-          items={["Latest Prize Breakdown", "EuroDreams Results"]}
-          openMenu={openMenu}
-          setOpenMenu={setOpenMenu}
-          timeoutRef={timeoutRef}
-        />
-
-        <div className="flex-1 text-center hover:text-yellow-300 cursor-pointer">
-          Check Tickets
-        </div>
-
-        <div className="flex-1 text-center hover:text-yellow-300 cursor-pointer">
-          App
-        </div>
-
-        <div className="flex-1 text-center hover:text-yellow-300 cursor-pointer">
-          News
-        </div>
-
-        <Dropdown
-          name="Information"
-          items={["How to Play", "FAQs"]}
-          openMenu={openMenu}
-          setOpenMenu={setOpenMenu}
-          timeoutRef={timeoutRef}
-        />
-
-        <div className="flex-1 text-center hover:text-yellow-300 cursor-pointer">
-          Statistics
-        </div>
-      </div>
-
-      {/* 📱 MOBILE MENU */}
-      {mobileOpen && (
-        <div className="md:hidden bg-[#0a2a66] text-white px-4 py-6 space-y-4">
-
-          <div className="flex items-center gap-2">
-            <Dice5 size={18} /> Casino
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Ticket size={18} /> Scratchcards
-          </div>
-
-          <Link href="/play">
-            <div className="bg-yellow-400 text-black px-4 py-2 rounded-full text-center font-semibold">
-              Play
-            </div>
-          </Link>
-
-          <div className="border-t border-white/20 pt-4 space-y-3">
-
-            <div>Results</div>
-            <div>Check Tickets</div>
-            <div>News</div>
-            <div>Information</div>
-
-          </div>
-
-          <div className="border-t border-white/20 pt-4 space-y-3">
-
-            <div className="flex items-center gap-2">
-              <User size={16} /> Sign In
-            </div>
-
-            <Link href="/signup">
-              <div className="bg-yellow-400 text-black px-4 py-2 rounded-full text-center font-semibold">
-                Sign Up
+                {/* DROPDOWN */}
+                {dropdownItems[item] && activeDropdown === item && (
+                  <div className="absolute top-8 left-0 bg-white shadow-xl rounded-xl py-2 w-44 border">
+                    {dropdownItems[item].map((sub) => (
+                      <div
+                        key={sub}
+                        className="px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
+                      >
+                        {sub}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            </Link>
+            ))}
+          </div>
 
+          {/* RIGHT SIDE */}
+          <div className="hidden md:flex items-center gap-3">
+            {/* LOGIN */}
+            <button
+              onClick={() => setOpenLogin(true)}
+              className="flex items-center gap-2 cursor-pointer bg-gray-100 text-gray-800 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 shadow-sm hover:bg-yellow-400 hover:text-black hover:scale-105 hover:shadow-md hover:shadow-yellow-300/40"
+            >
+              <User size={16} />
+              Log in / Sign up
+            </button>
+
+            {/* LANGUAGE */}
+            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer transition-all duration-300 shadow-sm hover:bg-yellow-400 hover:text-black hover:scale-105 hover:shadow-md hover:shadow-yellow-300/40">
+              <Globe size={18} />
+            </div>
+          </div>
+
+          {/* MOBILE MENU BUTTON */}
+          <div className="md:hidden">
+            <button onClick={() => setMobileOpen(!mobileOpen)}>
+              {mobileOpen ? <X /> : <Menu />}
+            </button>
           </div>
         </div>
-      )}
-    </div>
+
+        {/* 📱 MOBILE MENU */}
+        {mobileOpen && (
+          <div className="absolute top-20 left-0 w-full bg-white shadow-md p-6 md:hidden space-y-4 text-gray-700 z-40">
+            {navItems.map((item) => (
+              <div key={item}>
+                <div className="font-medium">{item}</div>
+
+                {dropdownItems[item] && (
+                  <div className="ml-4 mt-2 text-sm text-gray-500 space-y-1">
+                    {dropdownItems[item].map((sub) => (
+                      <div key={sub}>{sub}</div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+
+            <button
+              onClick={() => {
+                setOpenLogin(true);
+                setMobileOpen(false);
+              }}
+              className="w-full bg-yellow-400 py-2 rounded-full font-semibold"
+            >
+              Log in / Sign up
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* 🔐 LOGIN MODAL */}
+      <LoginModal isOpen={openLogin} onClose={() => setOpenLogin(false)} />
+    </>
   );
 }
