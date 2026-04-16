@@ -14,7 +14,6 @@ export default function Hero() {
   const [jackpot, setJackpot] = useState(0);
   const [time, setTime] = useState(0);
 
-  // 🎯 Generate numbers
   const generateNumbers = (): Ticket => {
     const main = new Set<number>();
     const stars = new Set<number>();
@@ -37,24 +36,21 @@ export default function Hero() {
     setTickets([generateNumbers()]);
   }, []);
 
-  // ⚡ Quick pick
   const quickPick = (index: number) => {
     const updated = [...tickets];
     updated[index] = generateNumbers();
     setTickets(updated);
   };
 
-  // 🗑 Delete
   const deleteLine = (index: number) => {
     setTickets(tickets.filter((_, i) => i !== index));
   };
 
-  // ➕ Add line
   const addLine = () => {
     setTickets([...tickets, generateNumbers()]);
   };
 
-  // 💰 Jackpot animation
+  // Jackpot animation
   useEffect(() => {
     let start = 0;
     const end = 132000000;
@@ -71,7 +67,7 @@ export default function Hero() {
     return () => clearInterval(interval);
   }, []);
 
-  // ⏱ Countdown
+  // Countdown
   useEffect(() => {
     const target = new Date();
     target.setHours(target.getHours() + 48);
@@ -94,11 +90,12 @@ export default function Hero() {
   };
 
   return (
-    <div className="px-6 py-10 bg-[#f3f4f6]">
-      <div className="max-w-7xl mx-auto rounded-2xl overflow-hidden shadow-md flex">
+    <div className="px-4 md:px-6 py-6 md:py-10 bg-[#f3f4f6]">
+      <div className="max-w-7xl mx-auto rounded-2xl overflow-hidden shadow-md flex flex-col md:flex-row">
+
         {/* LEFT */}
-        <div className="w-1/2 bg-white p-10">
-          <h1 className="text-3xl font-bold text-[#0a2a66] mb-4">
+        <div className="w-full md:w-1/2 bg-white p-6 md:p-10">
+          <h1 className="text-2xl md:text-3xl font-bold text-[#0a2a66] mb-4">
             LottoAfrica
           </h1>
 
@@ -106,16 +103,16 @@ export default function Hero() {
             LottoAfrica is a lottery played across Africa with massive jackpots.
           </p>
 
-          <h3 className="text-[#0a2a66] font-semibold mb-4">
+          <h3 className="text-[#0a2a66] font-semibold mb-4 text-sm md:text-base">
             Tuesday's Result - 14<sup>th</sup> April 2026
           </h3>
 
           {/* RESULT BALLS */}
-          <div className="flex gap-3 mb-4">
+          <div className="flex flex-wrap gap-2 md:gap-3 mb-4">
             {[1, 2, 4, 28, 44].map((n) => (
               <div
                 key={n}
-                className="w-12 h-12 bg-[#0a2a66] text-white rounded-full flex items-center justify-center font-bold"
+                className="w-10 h-10 md:w-12 md:h-12 bg-[#0a2a66] text-white rounded-full flex items-center justify-center font-bold"
               >
                 {n}
               </div>
@@ -124,7 +121,7 @@ export default function Hero() {
             {[5, 12].map((n) => (
               <div
                 key={n}
-                className="w-12 h-12 bg-yellow-400 text-black rounded-full flex items-center justify-center font-bold"
+                className="w-10 h-10 md:w-12 md:h-12 bg-yellow-400 text-black rounded-full flex items-center justify-center font-bold"
               >
                 {n}
               </div>
@@ -135,7 +132,7 @@ export default function Hero() {
             Millionaire Maker: <strong>TWGW 38925</strong>
           </p>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-3">
             <button className="bg-[#0a2a66] text-white px-5 py-2 rounded-full">
               Draw Details ▶
             </button>
@@ -147,7 +144,7 @@ export default function Hero() {
         </div>
 
         {/* RIGHT */}
-        <div className="w-1/2 relative text-white overflow-hidden">
+        <div className="w-full md:w-1/2 relative text-white overflow-hidden">
           <img
             src="/banner.jpg"
             className="absolute inset-0 w-full h-full object-cover"
@@ -155,21 +152,21 @@ export default function Hero() {
 
           <div className="absolute inset-0 bg-[#0a2a66]/70"></div>
 
-          <div className="relative z-10 p-10">
+          <div className="relative z-10 p-6 md:p-10">
             <p className="text-sm mb-1">
               Friday's estimated LottoAfrica jackpot:
             </p>
 
-            <div className="flex items-center gap-4 mb-3">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-3">
               <motion.h1
-                className="text-5xl font-extrabold text-yellow-400"
+                className="text-3xl md:text-5xl font-extrabold text-yellow-400"
                 initial={{ scale: 0.9 }}
                 animate={{ scale: 1 }}
               >
                 GHS {jackpot.toLocaleString()}
               </motion.h1>
 
-              <span className="text-sm font-bold">
+              <span className="text-xs md:text-sm font-bold">
                 IT'S A <span className="text-yellow-400">10x</span>
                 <br />
                 ROLLOVER!
@@ -186,12 +183,12 @@ export default function Hero() {
                 key={i}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-2 mb-2"
+                className="flex flex-wrap items-center gap-2 mb-3"
               >
                 {ticket.main.map((n) => (
                   <div
                     key={n}
-                    className="w-10 h-10 bg-white text-black rounded flex items-center justify-center"
+                    className="w-9 h-9 md:w-10 md:h-10 bg-white text-black rounded flex items-center justify-center"
                   >
                     {n}
                   </div>
@@ -200,41 +197,27 @@ export default function Hero() {
                 {ticket.stars.map((n) => (
                   <div
                     key={n}
-                    className="w-10 h-10 bg-yellow-400 text-black rounded flex items-center justify-center"
+                    className="w-9 h-9 md:w-10 md:h-10 bg-yellow-400 text-black rounded flex items-center justify-center"
                   >
                     {n}
                   </div>
                 ))}
 
-                {/* 🔥 ACTION BUTTONS */}
-                <div className="flex gap-2 ml-2">
-                  {/* QUICK PICK */}
-                  <div className="relative group">
-                    <button
-                      onClick={() => quickPick(i)}
-                      className="w-9 h-9 flex items-center justify-center rounded-full bg-[#0a2a66] border border-white/30 text-white transition-all duration-200 hover:bg-yellow-400 hover:text-black hover:scale-110 hover:shadow-lg hover:shadow-yellow-400/30"
-                    >
-                      <Wand2 size={16} />
-                    </button>
+                {/* ACTION BUTTONS */}
+                <div className="flex gap-2 ml-1 md:ml-2">
+                  <button
+                    onClick={() => quickPick(i)}
+                    className="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-full bg-[#0a2a66] text-white hover:bg-yellow-400 hover:text-black transition"
+                  >
+                    <Wand2 size={14} />
+                  </button>
 
-                    <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 text-xs bg-black text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
-                      Quick Pick
-                    </span>
-                  </div>
-
-                  {/* DELETE */}
-                  <div className="relative group">
-                    <button
-                      onClick={() => deleteLine(i)}
-                      className="w-9 h-9 flex items-center justify-center rounded-full bg-[#0a2a66] border border-white/30 text-white transition-all duration-200 hover:bg-red-500 hover:scale-110 hover:shadow-lg hover:shadow-red-500/30"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-
-                    <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 text-xs bg-black text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
-                      Delete
-                    </span>
-                  </div>
+                  <button
+                    onClick={() => deleteLine(i)}
+                    className="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-full bg-[#0a2a66] text-white hover:bg-red-500 transition"
+                  >
+                    <Trash2 size={14} />
+                  </button>
                 </div>
               </motion.div>
             ))}
@@ -248,7 +231,9 @@ export default function Hero() {
 
             <div className="text-right mb-4">
               <p className="text-xs">Time remaining:</p>
-              <p className="font-bold">{formatTime()}</p>
+              <p className="font-bold text-sm md:text-base">
+                {formatTime()}
+              </p>
             </div>
 
             <button className="w-full bg-yellow-400 text-black py-3 rounded-full font-semibold hover:scale-[1.02] transition">

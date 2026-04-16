@@ -8,9 +8,11 @@ import {
   User,
   Globe,
   ChevronDown,
+  Menu,
+  X,
 } from "lucide-react";
 
-/* ✅ DROPDOWN */
+/* DROPDOWN (DESKTOP ONLY) */
 function Dropdown({
   name,
   items,
@@ -37,18 +39,16 @@ function Dropdown({
 
   return (
     <div
-      className="relative flex-1 text-center"
+      className="relative flex-1 text-center hidden md:block"
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
     >
-      <div className="flex items-center justify-center gap-1 cursor-pointer hover:text-yellow-300 transition">
+      <div className="flex items-center justify-center gap-1 cursor-pointer hover:text-yellow-300">
         {name} <ChevronDown size={14} />
       </div>
 
       {openMenu === name && (
         <div className="absolute left-1/2 -translate-x-1/2 mt-3 w-56 bg-white text-black rounded-xl shadow-xl py-2 z-50">
-          <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rotate-45"></div>
-
           {items.map((item, i) => (
             <div
               key={i}
@@ -63,34 +63,34 @@ function Dropdown({
   );
 }
 
-/* MAIN NAVBAR */
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <div className="w-full font-sans">
 
       {/* 🔵 TOP BAR */}
-      <div className="bg-[#0a2a66] text-white px-10 py-3 flex justify-between items-center">
+      <div className="bg-[#0a2a66] text-white px-4 md:px-10 py-3 flex justify-between items-center">
 
         {/* LOGO */}
-        <div className="flex items-center gap-3 text-lg font-semibold cursor-pointer">
-          <div className="w-9 h-9 rounded-full border-2 flex items-center justify-center">
+        <div className="flex items-center gap-2 md:gap-3 text-lg font-semibold">
+          <div className="w-8 h-8 md:w-9 md:h-9 rounded-full border-2 flex items-center justify-center">
             ₵
           </div>
           LottoAfrica
         </div>
 
-        {/* CENTER */}
-        <div className="flex gap-8 text-sm items-center">
-
-          <div className="flex items-center gap-2 hover:text-yellow-300 cursor-pointer transition">
+        {/* DESKTOP CENTER */}
+        <div className="hidden md:flex gap-8 text-sm items-center">
+          <div className="flex items-center gap-2 hover:text-yellow-300 cursor-pointer">
             <Dice5 size={18} />
             Casino
           </div>
 
-          <div className="flex items-center gap-2 hover:text-yellow-300 cursor-pointer transition">
+          <div className="flex items-center gap-2 hover:text-yellow-300 cursor-pointer">
             <Ticket size={18} />
             Scratchcards
           </div>
@@ -105,43 +105,38 @@ export default function Navbar() {
         </div>
 
         {/* RIGHT */}
-        <div className="flex gap-4 text-sm items-center">
-
-          {/* LANGUAGE */}
-          <div className="flex items-center gap-1 cursor-pointer hover:text-yellow-300 transition">
+        <div className="hidden md:flex gap-4 text-sm items-center">
+          <div className="flex items-center gap-1 cursor-pointer hover:text-yellow-300">
             <Globe size={16} />
             English
-            <ChevronDown size={14} />
           </div>
 
-          {/* SIGN IN */}
-          <div className="flex items-center gap-1 cursor-pointer hover:text-yellow-300 transition">
+          <div className="flex items-center gap-1 cursor-pointer hover:text-yellow-300">
             <User size={16} />
             Sign In
           </div>
 
-          {/* SIGN UP BUTTON 🔥 */}
           <Link href="/signup">
             <button className="bg-yellow-400 text-[#0a2a66] px-4 py-1.5 rounded-full font-semibold hover:scale-105 transition">
               Sign Up
             </button>
           </Link>
         </div>
+
+        {/* MOBILE MENU BUTTON */}
+        <div className="md:hidden">
+          <button onClick={() => setMobileOpen(!mobileOpen)}>
+            {mobileOpen ? <X /> : <Menu />}
+          </button>
+        </div>
       </div>
 
-      {/* 🔷 BOTTOM BAR */}
-      <div className="bg-[#2f5fb3] text-white px-4 py-2 flex text-sm font-medium">
+      {/* 🔷 BOTTOM BAR (DESKTOP ONLY) */}
+      <div className="hidden md:flex bg-[#2f5fb3] text-white px-4 py-2 text-sm font-medium">
 
         <Dropdown
           name="Results"
-          items={[
-            "Latest Prize Breakdown",
-            "UK Millionaire Maker",
-            "EuroMillions HotPicks",
-            "EuroDreams Results",
-            "Eurojackpot Results",
-            "Free Lottery Results",
-          ]}
+          items={["Latest Prize Breakdown", "EuroDreams Results"]}
           openMenu={openMenu}
           setOpenMenu={setOpenMenu}
           timeoutRef={timeoutRef}
@@ -161,18 +156,7 @@ export default function Navbar() {
 
         <Dropdown
           name="Information"
-          items={[
-            "How to Play",
-            "Rules",
-            "Odds",
-            "FAQs",
-            "Associated Games",
-            "Superdraws",
-            "Subscriptions",
-            "Good Causes",
-            "Scams",
-            "Contact Us",
-          ]}
+          items={["How to Play", "FAQs"]}
           openMenu={openMenu}
           setOpenMenu={setOpenMenu}
           timeoutRef={timeoutRef}
@@ -181,46 +165,50 @@ export default function Navbar() {
         <div className="flex-1 text-center hover:text-yellow-300 cursor-pointer">
           Statistics
         </div>
-
-        <Dropdown
-          name="Prizes"
-          items={[
-            "How to Claim",
-            "Biggest Winners",
-            "Prize Winner Statistics",
-            "Unclaimed Prizes",
-          ]}
-          openMenu={openMenu}
-          setOpenMenu={setOpenMenu}
-          timeoutRef={timeoutRef}
-        />
-
-        <Dropdown
-          name="Other Lotteries"
-          items={[
-            "Eurojackpot",
-            "EuroDreams",
-            "Free Lottery",
-            "Irish Lotto",
-            "UK Lotto",
-            "Thunderball",
-            "Pick 3",
-            "Vikinglotto",
-            "French Loto",
-            "German Lotto",
-            "Italian SuperEnalotto",
-            "Spanish El Gordo de Navidad",
-            "Spanish El Niño",
-          ]}
-          openMenu={openMenu}
-          setOpenMenu={setOpenMenu}
-          timeoutRef={timeoutRef}
-        />
-
-        <div className="flex-1 text-center hover:text-yellow-300 cursor-pointer">
-          Number Generator
-        </div>
       </div>
+
+      {/* 📱 MOBILE MENU */}
+      {mobileOpen && (
+        <div className="md:hidden bg-[#0a2a66] text-white px-4 py-6 space-y-4">
+
+          <div className="flex items-center gap-2">
+            <Dice5 size={18} /> Casino
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Ticket size={18} /> Scratchcards
+          </div>
+
+          <Link href="/play">
+            <div className="bg-yellow-400 text-black px-4 py-2 rounded-full text-center font-semibold">
+              Play
+            </div>
+          </Link>
+
+          <div className="border-t border-white/20 pt-4 space-y-3">
+
+            <div>Results</div>
+            <div>Check Tickets</div>
+            <div>News</div>
+            <div>Information</div>
+
+          </div>
+
+          <div className="border-t border-white/20 pt-4 space-y-3">
+
+            <div className="flex items-center gap-2">
+              <User size={16} /> Sign In
+            </div>
+
+            <Link href="/signup">
+              <div className="bg-yellow-400 text-black px-4 py-2 rounded-full text-center font-semibold">
+                Sign Up
+              </div>
+            </Link>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 }

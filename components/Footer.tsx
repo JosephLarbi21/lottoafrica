@@ -12,15 +12,18 @@ import { MdEmail, MdPhone, MdLocationOn } from "react-icons/md";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0b0f1a] text-gray-300 px-6 py-16">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
-        {/* LEFT - ABOUT */}
+    <footer className="bg-[#0b0f1a] text-gray-300 px-4 md:px-6 pt-14 md:pt-16 pb-8">
+
+      {/* MAIN GRID */}
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12">
+
+        {/* ABOUT */}
         <div>
           <div className="flex items-center gap-3 mb-4">
             <img
               src="/logo.png"
               alt="logo"
-              className="w-12 h-12 object-contain"
+              className="w-10 h-10 md:w-12 md:h-12 object-contain"
             />
             <span className="text-white font-semibold text-lg">
               LottoAfrica
@@ -39,22 +42,17 @@ export default function Footer() {
               Join Our Community
             </h4>
 
-            <div className="flex gap-4">
-              <div className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-yellow-400 hover:text-black transition cursor-pointer">
-                <FaFacebookF />
-              </div>
-
-              <div className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-yellow-400 hover:text-black transition cursor-pointer">
-                <FaTwitter />
-              </div>
-
-              <div className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-yellow-400 hover:text-black transition cursor-pointer">
-                <FaLinkedinIn />
-              </div>
-
-              <div className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-yellow-400 hover:text-black transition cursor-pointer">
-                <FaInstagram />
-              </div>
+            <div className="flex gap-3">
+              {[FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram].map(
+                (Icon, i) => (
+                  <div
+                    key={i}
+                    className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-yellow-400 hover:text-black transition duration-300 cursor-pointer hover:scale-110 shadow hover:shadow-yellow-400/30"
+                  >
+                    <Icon size={14} />
+                  </div>
+                )
+              )}
             </div>
           </div>
         </div>
@@ -64,9 +62,14 @@ export default function Footer() {
           <h4 className="text-white font-semibold mb-4">Quick Links</h4>
 
           <ul className="space-y-3 text-sm">
-            <li className="hover:text-yellow-400 cursor-pointer">Home</li>
-            <li className="hover:text-yellow-400 cursor-pointer">Blog</li>
-            <li className="hover:text-yellow-400 cursor-pointer">Contact</li>
+            {["Home", "Blog", "Contact"].map((item, i) => (
+              <li
+                key={i}
+                className="hover:text-yellow-400 cursor-pointer transition duration-200 hover:translate-x-1"
+              >
+                {item}
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -75,9 +78,14 @@ export default function Footer() {
           <h4 className="text-white font-semibold mb-4">Explore</h4>
 
           <ul className="space-y-3 text-sm">
-            <li className="hover:text-yellow-400 cursor-pointer">Lotteries</li>
-            <li className="hover:text-yellow-400 cursor-pointer">Results</li>
-            <li className="hover:text-yellow-400 cursor-pointer">FAQs</li>
+            {["Lotteries", "Results", "FAQs"].map((item, i) => (
+              <li
+                key={i}
+                className="hover:text-yellow-400 cursor-pointer transition duration-200 hover:translate-x-1"
+              >
+                {item}
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -86,53 +94,59 @@ export default function Footer() {
           <h4 className="text-white font-semibold mb-4">Contact Us</h4>
 
           <div className="space-y-4 text-sm text-gray-400">
+
             <div className="flex items-start gap-2">
-              <MdLocationOn className="mt-1" />
+              <MdLocationOn className="mt-1 text-yellow-400" />
               <p>Gulf House, Gulf Street, Accra, Ghana</p>
             </div>
 
             <div className="flex items-center gap-2">
-              <MdPhone />
+              <MdPhone className="text-yellow-400" />
               <p>(+233) 247294683</p>
             </div>
 
             <div className="flex items-center gap-2">
-              <MdEmail />
+              <MdEmail className="text-yellow-400" />
               <p>support@lottoafrica.online</p>
             </div>
+
           </div>
         </div>
       </div>
 
       {/* PAYMENT */}
-      <div className="max-w-7xl mx-auto mt-16">
+      <div className="max-w-7xl mx-auto mt-14 md:mt-16">
         <h4 className="text-white font-semibold mb-4 text-center">
           Payment Gateway MTN MoMoPay
         </h4>
 
-        <div className="flex justify-center gap-6 flex-wrap">
-          <img src="/pay1.png" alt="pay1" className="h-10" />
-          <img src="/pay2.png" alt="pay2" className="h-10" />
-          <img src="/pay3.png" alt="pay3" className="h-10" />
-          <img src="/pay4.png" alt="pay4" className="h-10" />
+        <div className="flex flex-wrap justify-center gap-4 md:gap-6 opacity-80">
+          <img src="/pay1.png" alt="pay1" className="h-8 md:h-10" />
+          <img src="/pay2.png" alt="pay2" className="h-8 md:h-10" />
+          <img src="/pay3.png" alt="pay3" className="h-8 md:h-10" />
+          <img src="/pay4.png" alt="pay4" className="h-8 md:h-10" />
         </div>
       </div>
 
       {/* BOTTOM */}
-      <div className="border-t border-white/10 mt-12 pt-6 flex flex-col md:flex-row justify-between text-xs text-gray-400">
-        <p>© 2026 LottoAfrica. All Rights Reserved.</p>
+      <div className="border-t border-white/10 mt-10 md:mt-12 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-gray-400 gap-4">
 
-        <div className="flex gap-6 mt-3 md:mt-0">
-          <span className="hover:text-yellow-400 cursor-pointer">
+        <p className="text-center md:text-left">
+          © 2026 LottoAfrica. All Rights Reserved.
+        </p>
+
+        <div className="flex gap-4 md:gap-6 flex-wrap justify-center">
+          <span className="hover:text-yellow-400 cursor-pointer transition">
             Privacy Policy
           </span>
-          <span className="hover:text-yellow-400 cursor-pointer">
+          <span className="hover:text-yellow-400 cursor-pointer transition">
             Terms of Service
           </span>
-          <span className="hover:text-yellow-400 cursor-pointer">
+          <span className="hover:text-yellow-400 cursor-pointer transition">
             Game Policy
           </span>
         </div>
+
       </div>
     </footer>
   );
