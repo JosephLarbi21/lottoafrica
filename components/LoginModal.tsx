@@ -45,7 +45,7 @@ export default function LoginModal({
         {/* CLOSE */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-black transition"
+          className="absolute top-4 right-4 text-gray-400 cursor-pointer hover:text-black transition"
         >
           <X />
         </button>

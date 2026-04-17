@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, Globe, ChevronDown, User } from "lucide-react";
+import { Menu, X, Globe, ChevronDown, User, Phone, Mail } from "lucide-react";
 import LoginModal from "@/components/LoginModal";
 
 export default function Navbar() {
@@ -28,8 +28,41 @@ export default function Navbar() {
 
   return (
     <>
+      {/* 🟢 TOP INFO BAR */}
+      <div className="w-full bg-blue-900 text-white text-xs md:text-sm px-4 py-2 flex flex-col md:flex-row items-center justify-between gap-2">
+        {/* LEFT */}
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className="font-semibold">Need assistance?</span>
+
+          <div className="flex items-center gap-1">
+            <Phone size={14} />
+            <span>0266087946</span>
+          </div>
+
+          <span>|</span>
+
+          <span>0266087966</span>
+
+          <span>|</span>
+
+          <div className="flex items-center gap-1">
+            <Mail size={14} />
+            <span>info@lottoafrica.com</span>
+          </div>
+        </div>
+
+        {/* RIGHT */}
+        <div className="flex items-center gap-3">
+          <div className="w-6 h-6 flex items-center justify-center rounded-full border-2 border-red-500 text-red-500 font-bold text-[10px]">
+            18+
+          </div>
+
+          <span className="font-medium">Play responsibly</span>
+        </div>
+      </div>
+
+      {/* 🔵 MAIN NAV */}
       <div className="w-full flex justify-center py-4 px-4 bg-gradient-to-b from-gray-100 to-white sticky top-0 z-50">
-        {/* 🔥 CURVED NAV */}
         <div className="w-full max-w-7xl bg-white/90 backdrop-blur-md rounded-full shadow-lg px-6 py-3 flex items-center justify-between">
           {/* LOGO */}
           <div className="flex items-center gap-2 font-bold text-lg cursor-pointer">
@@ -58,7 +91,7 @@ export default function Navbar() {
 
                 {/* DROPDOWN */}
                 {dropdownItems[item] && activeDropdown === item && (
-                  <div className="absolute top-8 left-0 bg-white shadow-xl rounded-xl py-2 w-44 border">
+                  <div className="absolute top-8 left-0 bg-white shadow-xl rounded-xl py-2 w-44 border z-50">
                     {dropdownItems[item].map((sub) => (
                       <div
                         key={sub}
@@ -73,7 +106,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* RIGHT SIDE */}
+          {/* RIGHT */}
           <div className="hidden md:flex items-center gap-3">
             {/* LOGIN */}
             <button
@@ -85,12 +118,12 @@ export default function Navbar() {
             </button>
 
             {/* LANGUAGE */}
-            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer transition-all duration-300 shadow-sm hover:bg-yellow-400 hover:text-black hover:scale-105 hover:shadow-md hover:shadow-yellow-300/40">
+            <div className="w-10 h-10 rounded-full bg-gray-100 text-gray-800 flex items-center justify-center cursor-pointer transition-all duration-300 shadow-sm hover:bg-yellow-400 hover:text-black hover:scale-105 hover:shadow-md hover:shadow-yellow-300/40">
               <Globe size={18} />
             </div>
           </div>
 
-          {/* MOBILE MENU BUTTON */}
+          {/* MOBILE */}
           <div className="md:hidden">
             <button onClick={() => setMobileOpen(!mobileOpen)}>
               {mobileOpen ? <X /> : <Menu />}
@@ -98,9 +131,9 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* 📱 MOBILE MENU */}
+        {/* MOBILE MENU */}
         {mobileOpen && (
-          <div className="absolute top-20 left-0 w-full bg-white shadow-md p-6 md:hidden space-y-4 text-gray-700 z-40">
+          <div className="absolute top-24 left-0 w-full bg-white shadow-md p-6 md:hidden space-y-4 text-gray-700 z-40">
             {navItems.map((item) => (
               <div key={item}>
                 <div className="font-medium">{item}</div>
@@ -128,7 +161,7 @@ export default function Navbar() {
         )}
       </div>
 
-      {/* 🔐 LOGIN MODAL */}
+      {/* LOGIN MODAL */}
       <LoginModal isOpen={openLogin} onClose={() => setOpenLogin(false)} />
     </>
   );
